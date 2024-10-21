@@ -164,3 +164,7 @@ LOGIN_REDIRECT_URL = 'user_dashboard'
 ACCOUNT_LOGOUT_REDIRECT_URL = "account_login"
 # ACCOUNT_SIGNUP_REDIRECT_URL = "account_login"
 
+# settings.py
+AUTH_USER_MODEL = 'users.CustomUser'
+
+
