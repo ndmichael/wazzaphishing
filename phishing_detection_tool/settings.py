@@ -42,6 +42,12 @@ INSTALLED_APPS = [
 
     "crispy_forms",
     "crispy_bootstrap5",
+
+    'allauth',
+    'allauth.account',
+    "allauth.socialaccount",
+    'allauth.socialaccount.providers.google',
+    'allauth.socialaccount.providers.facebook',
 ]
 
 MIDDLEWARE = [
@@ -67,6 +73,9 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+
+                # `allauth` 
+                'django.template.context_processors.request',
             ],
         },
     },
@@ -134,3 +143,20 @@ MEDIA_URL = "/media/"
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Setups for allauth
+ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 1
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_EMAIL_VERIFICATION = "none"
+# ACCOUNT_RATE_LIMITS = 7
+ACCOUNT_AUTHENTICATION_METHOD = "username"
+ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = "index"
+
+# 1 day
+ACCOUNT_LOGIN_ATTEMPTS_TIMEOUT = 86400
+
+# or any other page
+LOGIN_REDIRECT_URL = 'user_dashboard'
+ACCOUNT_LOGOUT_REDIRECT_URL = "account_login"
+# ACCOUNT_SIGNUP_REDIRECT_URL = "account_login"
+
