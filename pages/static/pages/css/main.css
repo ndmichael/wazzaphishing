@@ -1,0 +1,13 @@
+
+
+
+
+#landing-page{
+    background: linear-gradient(to bottom, rgba(102, 255, 110, 0.8), 
+                rgb(16, 80, 40)),
+                url("/static/pages/images/cyberbackground1.jpg");   
+  background-position: center;
+  background-size: cover;
+  color: white !important;
+  min-height: 90vh;
+}
