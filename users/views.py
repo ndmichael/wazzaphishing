@@ -3,14 +3,15 @@ from django.contrib.auth.decorators import login_required
 
 
 @login_required
-def client_dashboard(request):
+def user_dashboard(request):
     context ={
-        "title": "client dashboard"
+        "title": "user dashboard"
     }
-    return render(request, "users/client_dashboard.html", context)
+    return render(request, "users/user_dashboard.html", context)
 
 @login_required
-def user_dashboard(request):
-    if request.user.is_staff:
-        return redirect('admindashboard')
-    return redirect('clientdashboard')
+def redirect_dashboard(request):
+    return redirect('userdashboard')
+    # if request.user.is_staff:
+    #     return redirect('admindashboard')
+    
