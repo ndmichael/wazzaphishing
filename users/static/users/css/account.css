@@ -1,0 +1,20 @@
+
+
+.content-wrapper{
+    padding: 2rem 10px;
+    background: linear-gradient(180deg, rgb(16, 80, 40) , 
+    rgba(102, 255, 110,.8)),
+                url("/static/pages/images/cyberbackground1.jpg");   
+    background-position: center;
+    background-size: cover;
+    color: white !important;
+    min-height: 90vh;
+}
+
+.content-wrapper p{
+    color: white !important;
+}
+
+.content-wrapper a{
+    color: inherit;
+}
