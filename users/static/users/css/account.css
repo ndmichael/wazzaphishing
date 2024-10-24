@@ -1,6 +1,6 @@
 
 
-.content-wrapper{
+.account-content{
     padding: 2rem 10px;
     background: linear-gradient(180deg, rgb(16, 80, 40) , 
     rgba(102, 255, 110,.8)),
@@ -11,10 +11,10 @@
     min-height: 90vh;
 }
 
-.content-wrapper p{
+.account-content p{
     color: white !important;
 }
 
-.content-wrapper a{
+.account-content a{
     color: inherit;
 }
