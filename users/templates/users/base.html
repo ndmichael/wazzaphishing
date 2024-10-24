@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 {% load static %}
+{% load i18n %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -12,6 +13,7 @@
         crossorigin="anonymous"
     >
     <link rel="stylesheet" href="{% static '/pages/css/main.css' %}">
+    <link rel="stylesheet" href="{% static '/users/css/account.css' %}">
 
     <!-- Icons CSS -->
     <link
@@ -22,7 +24,7 @@
 </head>
 <body>
     <nav class="navbar navbar-expand p-0 m-0 d-flex flex-column align-items-start" id="sidebar">
-        <a class="navbar-brand bg-danger text-center w-100" href="/">
+        <a class="navbar-brand bg-success text-center w-100 py-4" href="/">
             Wazza-Tool
         </a>
         <ul class="nav d-flex flex-column mt-3 w-100">
@@ -67,7 +69,8 @@
     {% endblock content %}
 
     <footer>
-        <div class="pt-lg-5 text-center" style="color: hsl(0, 0%, 95%)">&copy; {% trans "Copyright" %}
+        <div class="pt-lg-5 text-center" style="color: hsl(0, 0%, 95%)">&copy; 
+        {% trans "Copyright" %}
           <strong><span>Razza Anti-Phishing Tool.</span></strong><br />
           {% trans "All Rights Reserved" %}
         </div>
