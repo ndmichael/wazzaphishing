@@ -1,6 +1,10 @@
 
 
-
+a{
+    display: block;
+    color: inherit;
+    text-decoration: none;
+}
 
 #landing-page{
     padding: 5rem 10px;
