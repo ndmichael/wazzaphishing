@@ -64,9 +64,35 @@
     </nav> 
     
     <section class="content-wrapper">
-    {% block content %}
+        <nav class=" navbar navbar-expand-sm shadow-sm bg-white">
+            <section class="container">
+                <ul class="navbar-nav mb-2 mb-lg-0 ms-auto">
+                    <li><p class="me-3 pt-1">Hello <span>{{request.user.username}}</span></p></li>
+                    <li><i class="bi bi-person-circle me-4"  style="font-size: 22px;"></i> </li>
+                    <li><a
+                        type="menu"
+                        class="
+                            openbtn 
+                            btn 
+                            btn-danger
+                            btn-small 
+                            d-inline-block
+                            d-md-none
+                            " 
+                        id="toggleSidebar"
+                        
+                    >
+                        <i class="bi bi-menu-app" style="font-size: 18px;"></i>
+                    </a> </li>
+                </ul>
+            </section>
+        </nav>
 
-    {% endblock content %}
+        <section class="content py-5 px-3">
+            {% block content %}
+
+            {% endblock content %}
+        </section>
 
     <footer>
         <div class="pt-lg-5 text-center" style="color: hsl(0, 0%, 95%)">&copy; 
