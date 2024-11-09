@@ -8,6 +8,7 @@ urlpatterns = [
     path('', include('pages.urls')),
     path('user/', include('users.urls')),
     path('accounts/', include('allauth.urls')),
+    path('phishing/', include('phishing.urls')),
 ]
 
 if settings.DEBUG:
