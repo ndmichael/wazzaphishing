@@ -6,7 +6,11 @@
     <div class="container">
         <section class="row">
             <div class="col-12">
-                <h1>UPLOAD IMAGE FOR SCAN</h1>
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit" class="btn btn-success btn-lg">Analyze Email</button>
+                </form>
             </div>
         </section>
     </div>
