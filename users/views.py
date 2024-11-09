@@ -11,7 +11,7 @@ def user_dashboard(request):
 
 @login_required
 def redirect_dashboard(request):
-    return redirect('userdashboard')
+    return redirect('user_dashboard')
     # if request.user.is_staff:
     #     return redirect('admindashboard')
     
