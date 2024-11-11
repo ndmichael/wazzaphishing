@@ -1,3 +1,4 @@
 from django.contrib import admin
+from .models import UploadedEmail
 
-# Register your models here.
+admin.site.register(UploadedEmail)
