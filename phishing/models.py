@@ -7,6 +7,9 @@ from users.models import CustomUser
 class UploadedEmail(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     email_file = models.FileField(upload_to='emails/')
+    extracted_subject = models.CharField(max_length=255, blank=True, null=True)  # Optional, populated after analysis
+    extracted_sender = models.EmailField(blank=True, null=True)  # Optional, populated after analysis
+    extracted_body = models.TextField(blank=True, null=True) 
     uploaded_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
