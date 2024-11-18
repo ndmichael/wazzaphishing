@@ -4,6 +4,8 @@ from .forms import EmailUploadForm
 from phishing.utils.ml_model import vectorizer, phishing_model
 from phishing.utils.process_email_file import extract_email_content
 from django.core.exceptions import ValidationError
+import os
+from django.conf import settings
 
 @login_required
 def scan_email(request):
@@ -13,15 +15,21 @@ def scan_email(request):
             email_instance = form.save(commit=False)
             email_instance.user = request.user
             
-            # Extract email details
-            # and save model
             try:
-                extract_email_content(email_instance, request.FILES['email_file'])
+                data = extract_email_content(request.FILES['email_file'])
+                subject = data.get('subject')
+                sender = data.get('sender')
+                body = data.get('body')
+                print(f"subject: {subject}, sender: {sender}, body: {body}")
+                email_instance.extracted_subject = subject
+                email_instance.extracted_sender = sender
+                email_instance.extracted_body = body
                 email_instance.save()
             except Exception as e:
-                 form.add_error('email_file', f"Failed to parse the email file: {e}")
+                form.add_error('email_file', f"Failed to parse the email file: {e}")
 
-            vectorized_text = vectorizer.transform([processed_text])
+
+            vectorized_text = vectorizer.transform(email_instance.extracted_body)
 
             return redirect('scan_email')  # Redirect to a success or report page
     else:
