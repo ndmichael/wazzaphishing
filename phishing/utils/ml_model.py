@@ -2,12 +2,13 @@ import joblib
 import os
 import nltk
 
+# from django.conf import settings
+
 # Define the path to the model files
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-MODEL_PATH = os.path.join(BASE_DIR, "ml_models", "phishing_model.joblib")
-VECTORIZER_PATH = os.path.join(BASE_DIR, "ml_models", "vectorizer.joblib")
+MODEL_PATH = os.path.join(BASE_DIR, "", "phishing_model.joblib")
+VECTORIZER_PATH = os.path.join(BASE_DIR, "", "vectorizer.joblib")
 
-# Load the model and vectorizer
 try:
     phishing_model = joblib.load(MODEL_PATH)
     vectorizer = joblib.load(VECTORIZER_PATH)
