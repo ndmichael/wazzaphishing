@@ -32,7 +32,7 @@ class PhishingReport(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"Report for {self.email.subject} - Risk: {self.risk_level}"
+        return f"Report for {self.email.extracted_subject} - Risk: {self.risk_level}"
 
     def summary_of_indicators(self):
         """Returns a human-readable summary of the phishing indicators."""
