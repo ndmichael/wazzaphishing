@@ -6,7 +6,7 @@
 <section>
     <div class="container">
         <section class="row">
-            <div class="col-12 col-md-10 mx-auto">
+            <div id="form-container" class="col-12 col-md-10 mx-auto">
                 <header>
                     <h1>Upload Email for Scanning</h1>
                     <p>Only .txt or .eml files are accepted in this form</p>
@@ -15,11 +15,31 @@
                     method="POST" 
                     enctype="multipart/form-data"
                     class="border border-success shadow p-5 bg-light"
+                    id="detect-form"
                 >
                     {% csrf_token %}
                     {% crispy form %}
                     <button type="submit" class="btn btn-success btn-lg">Analyze Email</button>
                 </form>
+
+                <div >
+                    <!-- Loading Spinner -->
+                    <div id="loading" class="text-center">
+                        <p>Detection in progress... Please wait.</p>
+                        <div class="spinner-border text-success" role="status">
+                            <span class="sr-only"></span>
+                          </div>
+                    </div>
+
+                    <!-- Result Section -->
+                    <div id="result" class="">
+                        <h2>Analysis Report</h2>
+                        <p><strong>Risk Level:</strong> <span id="risk-level"></span></p>
+                        <p><strong>Flagged Words:</strong> <span id="flagged-words"></span></p>
+                        <p><strong>URLs:</strong></p>
+                        <ul id="urls-list"></ul>
+                    </div>
+                </div>
             </div>
         </section>
     </div>
