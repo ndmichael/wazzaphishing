@@ -54,7 +54,21 @@
 
                                             <div class="d-flex justify-content-between">
                                                 <p>Score:</p>
-                                                <p class="text-end fw-bolder">{{report.calculate_risk_score}}</p>
+                                                <p class="text-end fw-bolder">
+        
+                                                    {% for flagged_words in report.phishing_indicators.flagged_words %}
+                                                        <span> {{ flagged_words }}, </span>
+                                                    {% empty %}
+                                                        <p>No flagged words.</p>
+                                                    {% endfor %}
+                                                </p>
+                                            </div>
+
+                                            <div class="d-flex justify-content-between">
+                                                <p>Total urls:</p>
+                                                <p class="text-end fw-bolder">
+                                                    {{report.phishing_indicators.flagged_words|length}} urls
+                                                </p>
                                             </div>
                                         </div>
                                         <div class="modal-footer">
