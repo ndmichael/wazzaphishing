@@ -8,12 +8,12 @@
         <section class="row">
             <div class="col-12 col-md-10 mx-auto">
                 <header>
-                    <h1 class="display-4">Your scanning reports</h1>
-                    <p>Only .txt or .eml files are accepted in this form</p>
+                    <h1 class="display-4">Your Scanning Reports</h1>
+                    <p>All your reports....</p>
                 </header>
             </div>
 
-            <div class="col-12 col-md-12">
+            <div class="col-12 col-md-10 mx-auto">
                 <div class="table-responsive p-4 bg-white shadow-sm rounded-5">
                     <table class="table">
                         <thead class="thead-dark">
@@ -26,13 +26,66 @@
                         </thead>
                         <tbody>
                             {% for report in reports %}
+                                <div class="modal fade" id="report-{{report.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="exampleModalLabel">
+                                            {{report.email.extracted_subject}}
+                                        </h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="d-flex justify-content-between">
+                                                <p>Risk Level:</p>
+                                                {% if report.risk_level == "Low" %}
+                                                <p class="text-end fw-bolder text-success">{{report.risk_level}}</p>
+                                                {% elif report.risk_level == "Medium" %}
+                                                <p class="text-end fw-bolder text-primary">{{report.risk_level}}</p>
+                                                {% elif report.risk_level == "High" %}
+                                                <p class="text-end fw-bolder text-danger">{{report.risk_level}}</p>
+                                                {% endif %}
+                                            </div>
+
+                                            <div class="d-flex justify-content-between">
+                                                <p>Date:</p>
+                                                <p class="text-end fw-bolder">{{report.created_at}}</p>
+                                            </div>
+
+                                            <div class="d-flex justify-content-between">
+                                                <p>Score:</p>
+                                                <p class="text-end fw-bolder">{{report.calculate_risk_score}}</p>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                              
                                 <tr>
                                     <td>{{report.email.extracted_subject}}</td>
-                                    <td>{{report.risk_level}}</td>
+                                    <td>
+                                        {% if report.risk_level == "Low" %}
+                                        <p class="fw-bolder text-success">{{report.risk_level}}</p>
+                                        {% elif report.risk_level == "Medium" %}
+                                        <p class="fw-bolder text-primary">{{report.risk_level}}</p>
+                                        {% elif report.risk_level == "High" %}
+                                        <p class="fw-bolder text-danger">{{report.risk_level}}</p>
+                                        {% endif %}
+                                    </td>
                                     <td>{{report.created_at}}</td>
                                     <td>
-                                        <a href="">
-                                            <i class="bi bi-app-indicator text-success fw-bolder" style="font-size: 20px;"></i>
+                                        <a 
+                                            href=""
+                                            data-bs-toggle="modal" 
+                                            data-bs-target="#report-{{report.id}}"
+                                            data-toggle="tooltip" 
+                                            data-placement="bottom" 
+                                            title="Report Details"
+                                        >
+                                            <i class="bi bi-app-indicator text-success fw-bolder" style="font-size: 28px;"></i>
                                         </a>
                                     </td>
                                 </tr>
