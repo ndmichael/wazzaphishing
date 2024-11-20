@@ -8,6 +8,7 @@ from .models import UploadedEmail, PhishingReport
 import re
 from django.template.loader import render_to_string
 from django.http import JsonResponse
+from django.contrib import messages
 
 @login_required
 def scan_email(request):
@@ -62,7 +63,11 @@ def scan_email(request):
                 phishing_indicators=phishing_indicators,
             )
             phishing_report.save()
-            print(f"risk prediction: {risk_prediction}")
+            
+            messages.success(
+                request, f"Scanning success"
+            )
+
             # Return JSON response
             return JsonResponse({
                 'success': True,
@@ -72,14 +77,11 @@ def scan_email(request):
                 "risk_percent": probability,
             })
         
-            
-
-            # return redirect('scan_email')  # Redirect to a success or report page
     else:
         form = EmailUploadForm()
 
     context ={
-        "title": "user dashboard",
+        "title": "scan email",
         "form": form
     }
     return render(request, "phishing/scan_email.html", context)
@@ -87,7 +89,7 @@ def scan_email(request):
 
 @login_required
 def analysis_report(request):
-    reports  = PhishingReport.objects.filter(email__user=request.user)
+    reports  = PhishingReport.objects.filter(email__user=request.user).order_by("-created_at")
 
     context ={
         "title": "analysis report",
