@@ -1,0 +1,51 @@
+{% extends 'users/base.html' %} 
+{% load static %} 
+{% load crispy_forms_tags %}
+
+{% block content %}
+<section>
+    <div class="container">
+        <section class="row">
+            <div class="col-12 col-md-10 mx-auto">
+                <header>
+                    <h1 class="display-4">Your scanning reports</h1>
+                    <p>Only .txt or .eml files are accepted in this form</p>
+                </header>
+            </div>
+
+            <div class="col-12 col-md-12">
+                <div class="table-responsive p-4 bg-white shadow-sm rounded-5">
+                    <table class="table">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th scope="col">Email  Subject</th>
+                                <th scope="col">Risk Level</th>
+                                <th scope="col">Date</th>
+                                <th scope="col">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for report in reports %}
+                                <tr>
+                                    <td>{{report.email.extracted_subject}}</td>
+                                    <td>{{report.risk_level}}</td>
+                                    <td>{{report.created_at}}</td>
+                                    <td>
+                                        <a href="">
+                                            <i class="bi bi-app-indicator text-success fw-bolder" style="font-size: 20px;"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% empty %}
+                            <tr>
+                                <h2 class="alert alert-info">No Reports</h2>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table> 
+                </div>
+            </div>
+        </section>
+    </div>
+</section>
+{% endblock %}
