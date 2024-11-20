@@ -9,7 +9,19 @@
 #risk-level{
     font-size: 2.7rem;
 }
-#flagged-words{
-    font-size: 1.5rem;
-    font-weight: bolder;
+
+.url-item a {
+    display: inline-block;      /* Ensures the ellipsis works */
+    max-width: 100%;            /* Restricts the width to the container */
+    white-space: nowrap;        /* Prevents wrapping */
+    overflow: hidden;           /* Hides the overflow text */
+    text-overflow: ellipsis;    /* Adds the ellipsis at the end */
+    color: #3498db;             /* Optional styling for links */
+    text-decoration: none;      /* Optional styling */
+}
+
+.url-item a.wrap {
+    word-break: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
 }
