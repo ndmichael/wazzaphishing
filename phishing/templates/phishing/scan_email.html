@@ -21,26 +21,26 @@
                     {% crispy form %}
                     <button type="submit" class="btn btn-success btn-lg">Analyze Email</button>
                 </form>
+            </div>
 
-                <div >
-                    <!-- Loading Spinner -->
-                    <div id="loading" class="text-center">
-                        <p>Detection in progress... Please wait.</p>
-                        <div class="spinner-border text-success" role="status">
-                            <span class="sr-only"></span>
-                          </div>
-                    </div>
+            <div class="col-12 col-md-8 mx-auto mt-5">
+                <!-- Loading Spinner -->
+                <div id="loading" class="text-center hidden">
+                    <p>Detection in progress, Please wait...</p>
+                    <div class="spinner-border text-success" role="status">
+                        <span class="sr-only"></span>
+                      </div>
+                </div>
 
-                    <!-- Result Section -->
-                    <div id="result" class="">
-                        <h2>Analysis Report</h2>
-                        <p>
-                            <strong>Risk Level:</strong> <span id="risk-level"></span>
-                        </p>
-                        <p><strong>Flagged Words:</strong> <span id="flagged-words"></span></p>
-                        <p><strong>URLs:</strong></p>
-                        <ul id="urls-list"></ul>
-                    </div>
+                <!-- Result Section -->
+                <div id="result" class="hidden">
+                    <h2>Analysis Report</h2>
+                    <p>
+                        <strong>Risk Level:</strong> <span id="risk-level"></span>
+                    </p>
+                    <p><strong>Flagged Words:</strong> <span id="flagged-words"></span></p>
+                    <p><strong>URLs:</strong></p>
+                    <ul id="urls-list" class="list-group"></ul>
                 </div>
             </div>
         </section>
