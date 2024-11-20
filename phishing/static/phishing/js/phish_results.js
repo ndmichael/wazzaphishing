@@ -9,17 +9,21 @@ const flagged_words = document.getElementById('flagged-words');
 const urlsList = document.getElementById('urls-list');
 
 const formActionUrl = '/phishing/scan/email/';
+
 form.onsubmit = async (event) => {
 
     event.preventDefault();
     const formData = new FormData(form);
     submitButton.disabled = true;
 
-//     // Update UI
-//     loading.classList.add('visible');
-//     loading.classList.remove('hidden');
-//     formContainer.classList.add('hidden');
-//     formContainer.classList.remove('visible');
+     // Update UI
+    loading.classList.add('visible');
+    loading.classList.remove('hidden');
+    // formContainer.classList.add('hidden');
+    // formContainer.classList.remove('visible');
+
+    // Define a minimum loader time of 1 minute (60,000 ms)
+    const minimumLoaderTime = new Promise((resolve) => setTimeout(resolve, 60000));
 
     try {
         const response = await fetch(formActionUrl, {
@@ -33,25 +37,27 @@ form.onsubmit = async (event) => {
         else{
             const data = await response.json();
             
+            setTimeout(()=>{
+                loading.classList.add('hidden');
+                loading.classList.remove('visible');
+                result.classList.add('visible');
+                result.classList.remove('hidden');
 
-            result.classList.add('visible');
-            result.classList.remove('hidden');
-
+            }, 6000)
+            
             // Update the analysis report
             level =  data.risk_level;
             risk_level.textContent =level
-            alert(data.risk_percent)
-            // alert(data.risk_prediction)
             
             // Apply colors based on risk level
             if (level.toUpperCase() === "HIGH") {
                 risk_level.style.color = "red";
             } else if (level.toUpperCase() === "MEDIUM") {
-                risk_level.style.color = "black";
+                risk_level.style.color = "gold";
             } else if (level.toUpperCase() === "LOW") {
                 risk_level.style.color = "green";
             }
-            flagged_words.textContent = data.flagged_words.join(", ");
+            flagged_words.textContent = data.flagged_words.join(", ") || "None";
 
             // Display URLs
             urlsList.innerHTML = '';
@@ -67,6 +73,8 @@ form.onsubmit = async (event) => {
                 listItem.appendChild(link);
                 urlsList.appendChild(listItem);
             });
+
+            form.reset()
         }
         
     } catch (error) {
