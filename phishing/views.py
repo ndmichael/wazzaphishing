@@ -38,10 +38,13 @@ def scan_email(request):
             probability = phishing_model.predict_proba(vectorized_text)[0][1]  
         
             # Step 4: Map the prediction to risk levels
-            if risk_prediction == '1':
-                risk_level = PhishingReport.HIGH if probability >= 0.8 else PhishingReport.MEDIUM
+            if int(risk_prediction) == 1 and probability >= 0.8:
+                risk_level = PhishingReport.HIGH 
+            elif str(risk_prediction) == '1' and probability >= 0.5:
+                risk_level = PhishingReport.MEDIUM
             else:
                 risk_level = PhishingReport.LOW
+            
 
             # Step 5: Extract phishing indicators
             phishing_keywords = ["urgent", "click", "verify", "account", "login"]
@@ -56,16 +59,20 @@ def scan_email(request):
             phishing_report = PhishingReport(
                 email=email_instance,
                 risk_level=risk_level,
-                phishing_indicators=phishing_indicators
+                phishing_indicators=phishing_indicators,
             )
             phishing_report.save()
+            print(f"risk prediction: {risk_prediction}")
             # Return JSON response
             return JsonResponse({
                 'success': True,
                 'risk_level': risk_level,
                 'flagged_words': flagged_words,
                 'urls': urls,
+                "risk_percent": probability,
             })
+        
+            
 
             # return redirect('scan_email')  # Redirect to a success or report page
     else:
