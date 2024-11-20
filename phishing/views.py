@@ -83,3 +83,15 @@ def scan_email(request):
         "form": form
     }
     return render(request, "phishing/scan_email.html", context)
+
+
+@login_required
+def analysis_report(request):
+    reports  = PhishingReport.objects.filter(email__user=request.user)
+
+    context ={
+        "title": "analysis report",
+        "reports": reports
+    }
+    
+    return render(request, "phishing/analysis_report.html", context)
