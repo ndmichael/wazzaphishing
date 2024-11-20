@@ -55,8 +55,11 @@ form.onsubmit = async (event) => {
 
             // Display URLs
             urlsList.innerHTML = '';
+
             data.urls.forEach(url => {
                 const listItem = document.createElement('li');
+                listItem.classList.add('url-item')
+                listItem.classList.add('list-group-item');
                 const link = document.createElement('a');
                 link.href = url;
                 link.target = "_blank";
