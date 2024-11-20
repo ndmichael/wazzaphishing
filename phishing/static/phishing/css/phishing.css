@@ -1,0 +1,15 @@
+#loading{
+    padding-top: 30px;
+}
+
+.hidden { display: none; }
+.visible { display: block; }
+
+
+#risk-level{
+    font-size: 2.7rem;
+}
+#flagged-words{
+    font-size: 1.5rem;
+    font-weight: bolder;
+}
