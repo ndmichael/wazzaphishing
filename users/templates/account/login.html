@@ -11,7 +11,14 @@
           <article class="col-lg-7 mx-auto">
                 <form class="login p-2 p-md-5" method="POST" action="{% url 'account_login' %}">
                   <div>
-                    <h1 class="h2 fw-bold text-center">{% trans "Wazza Anti Phishing" %}</h1>
+                    <a 
+                      href="{% url 'user_dashboard' %}" 
+                      class="pb-1 fw-bolder"
+                      style="text-shadow: 0 0 7px rgb(0,0,0,0.7);"
+                    >
+                      <h1 class="h2 fw-bold text-center">{% trans "Wazza Anti Phishing" %}</h1>
+                    </a>
+                    
                     <p class="text-center text-muted">{% trans "Welcome Back." %}</p>
                   </div>
                   <br />
