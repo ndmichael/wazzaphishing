@@ -17,7 +17,14 @@
         action="{% url 'account_signup' %}"
       >
       <header class="pb-4 text-center">
-        <h1 class="h3 fw-bolder">Begin Your Journey Today</h1>
+        <a 
+          href="{% url 'user_dashboard' %}" 
+          class="pb-1 fw-bolder"
+          style="text-shadow: 0 0 7px rgb(0,0,0,0.7);"
+        >
+          <h1 class="h3 fw-bolder">Begin Your Journey Today</h1>
+        </a>
+        
         <p class="text-muted">
           Start building your future
           and fullfill your dreams today
