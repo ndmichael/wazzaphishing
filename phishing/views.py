@@ -97,3 +97,11 @@ def analysis_report(request):
     }
     
     return render(request, "phishing/analysis_report.html", context)
+
+
+def user_settings(request):
+
+    context = {
+        "title": "settings",
+    }
+    return render(request, 'phishing/user_settings.html', context)
