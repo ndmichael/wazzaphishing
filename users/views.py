@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.db.models import Count
 from django.contrib.auth.decorators import login_required
 from phishing.models import PhishingReport
 
@@ -6,9 +7,15 @@ from phishing.models import PhishingReport
 @login_required
 def user_dashboard(request):
     total_phishing = PhishingReport.objects.all().count
+
+    # Count phishing reports by risk level
+    risk_counts = PhishingReport.objects.values('risk_level').annotate(count=Count('risk_level'))
+    risk_data = {item['risk_level']: item['count'] for item in risk_counts}
+
     context ={
         "title": "user dashboard",
-        "total_phishing" :total_phishing
+        "total_phishing" :total_phishing,
+        'risk_data': risk_data
     }
     return render(request, "users/user_dashboard.html", context)
 
