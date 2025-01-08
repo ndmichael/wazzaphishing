@@ -73,24 +73,22 @@
     <section class="content-wrapper">
         <nav class=" navbar navbar-expand-sm shadow-sm bg-white">
             <section class="container">
-                <ul class="navbar-nav mb-2 mb-lg-0 ms-auto">
-                    <li><p class="me-3 pt-1">Hello <span>{{request.user.username}}</span></p></li>
-                    <li><i class="bi bi-person-circle me-4"  style="font-size: 22px;"></i> </li>
-                    <li><a
-                        type="menu"
-                        class="
-                            openbtn 
-                            btn 
-                            btn-danger
-                            btn-small 
-                            d-inline-block
-                            d-md-none
-                            " 
-                        id="toggleSidebar"
-                        
-                    >
-                        <i class="bi bi-menu-app" style="font-size: 18px;"></i>
-                    </a> </li>
+                <button 
+                    class="btn toggler d-md-none" 
+                    type="button" 
+                    onclick="toggleSidebar()"
+                >
+                    <span class="bi bi-list text-success bg-light p-2" style="font-size: 25px;"></span>
+                </button>
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <p class="me-3 pt-1">Hello 
+                            <span>{{request.user.username}}</span> 
+                            <span class="mt-5 ps-3 bg-success">
+                                <i class="bi bi-person-circle"  style="font-size: 22px;"></i> 
+                            </span>      
+                        </p>
+                    </li>
                 </ul>
             </section>
         </nav>
