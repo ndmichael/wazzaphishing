@@ -57,3 +57,15 @@
     background: #edfdf4b5;
     /* padding-top: 7rem; */
 }
+
+
+@media (max-width: 768px) {
+    .content-wrapper {
+        padding-left: 0;  /* Adjust to the width of your sidebar*/
+        width: 100%;
+    }
+
+    #sidebar {
+        width: 0;/* Hidden by default on small screens */
+    }
+}
