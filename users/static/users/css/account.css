@@ -27,6 +27,7 @@
     background: #b7e5c1;
     z-index: 100;
     overflow-x: hidden;
+    transition: .3s;
 }
 
 .nav-link{
@@ -56,6 +57,11 @@
     /* position: absolute; */
     background: #edfdf4b5;
     /* padding-top: 7rem; */
+}
+
+#sidebar.show {
+    width: 250px; /* Slide into view */
+    transition: .3s;
 }
 
 
