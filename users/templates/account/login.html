@@ -1,47 +1,71 @@
 {% extends "account/base.html" %}
 {% load static %}
-{% load i18n %}
-{% load account socialaccount %}
 {% load crispy_forms_tags %}
-
 {% block content %}
-  <!-- Section: Log In -->
-      <section class="container">
-        <div class="row">
-          <article class="col-lg-7 mx-auto">
-                <form class="login p-2 p-md-5" method="POST" action="{% url 'account_login' %}">
-                  <div>
-                    <a 
-                      href="{% url 'user_dashboard' %}" 
-                      class="pb-1 fw-bolder"
-                      style="text-shadow: 0 0 7px rgb(0,0,0,0.7);"
-                    >
-                      <h1 class="h2 fw-bold text-center">{% trans "Wazza Anti Phishing" %}</h1>
-                    </a>
-                    
-                    <p class="text-center text-muted">{% trans "Welcome Back." %}</p>
-                  </div>
-                  <br />
-                  <div class="row">
-                    {% csrf_token %}
-                    {{ form|crispy }}
-                    {% if redirect_field_value %}
-                      <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
-                    {% endif %}
-                    <a class="button btn-danger" href="{% url 'account_reset_password' %}"></a>
-                    <div class="pb-4">
-                      <button class="btn btn-success btn-lg shadow fw-bolder btn-lg col-12" type="submit">{% trans "Sign In" %}</button>
-                    </div>
-                    <div class="d-flex justify-content-center">
-                      <span class="pe-2">{% trans "Don't have an Account" %}</span>
-                      <a class="text-info fw-bolder secondaryAction d-flex" href="{% url 'account_signup' %}">
-                        {% trans "Sign up" %}
-                      </a>
-                    </div>
-                  </div>
-                </form>
-          </article>
-        </div>
-  </section>
-  <!-- Section: Log In -->
-{% endblock content %}
+
+<div class="min-h-screen grid grid-cols-1 md:grid-cols-2 bg-[#0b0f19]">
+
+  <!-- LEFT VISUAL PANEL -->
+  <div class="relative hidden md:flex items-center justify-center overflow-hidden">
+
+    <img src="{% static 'pages/images/cyberbackground1.jpg' %}"
+         class="absolute inset-0 w-full h-full object-cover object-center" alt="Cyber Security">
+
+    <!-- Soft Gradient Brand Overlay -->
+    <div class="absolute inset-0 bg-gradient-to-br from-[#b44cff]/40 to-[#ff3fa4]/40 mix-blend-overlay"></div>
+
+    <!-- Center Text -->
+    <div class="relative z-10 px-12">
+      <h1 class="text-5xl font-bold text-white leading-tight drop-shadow-[0_0_18px_#b44cffaa]">
+        Welcome Back, Secure One
+      </h1>
+      <p class="mt-4 text-pink-200 text-lg font-light tracking-wide">
+        Cyber • Private • Encrypted
+      </p>
+    </div>
+
+  </div>
+
+  <!-- RIGHT LOGIN FORM -->
+  <div class="flex items-center justify-center px-8 py-16">
+
+    <div class="w-full max-w-md bg-white/10 backdrop-blur-xl border border-white/20
+                p-10 rounded-3xl shadow-[0_0_45px_#b44cff33]
+                animate-[fadeIn_0.9s_ease]">
+
+      <h2 class="text-center text-3xl font-extrabold bg-gradient-to-r from-[#ff3fa4] to-[#b44cff] bg-clip-text text-transparent">
+        Sign in to Continue
+      </h2>
+
+      <p class="text-center text-gray-300 mt-2 mb-8 text-sm">
+        Your security is our priority
+      </p>
+
+      <form method="POST" action="{% url 'account_login' %}" class="space-y-6">
+        {% csrf_token %}
+        {{ form|crispy }}
+
+        <button
+          class="w-full py-3 rounded-full font-semibold
+                 bg-gradient-to-r from-[#ff3fa4] to-[#b44cff]
+                 text-white shadow-[0_0_20px_#ff3fa4aa]
+                 hover:shadow-[0_0_38px_#b44cffbb]
+                 hover:scale-[1.05] transition-all duration-300">
+          Sign In
+        </button>
+      </form>
+
+      <p class="text-center text-gray-300 mt-6 text-sm">
+        New Here?
+        <a href="{% url 'account_signup' %}" class="text-[#ff69d9] hover:underline">
+          Create an Account
+        </a>
+      </p>
+
+    </div>
+
+  </div>
+
+</div>
+
+{% endblock %}
