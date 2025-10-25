@@ -1,69 +1,79 @@
-{% extends 'pages/base.html' %} 
-{% load static %} 
+{% extends 'pages/base.html' %}
+{% load static %}
 
 {% block content %}
-<section id="landing-page">
-    <div class="container">
-        <section class="row">
-            <div class="col-12 col-md-10 mx-auto">
-                <div class="text-center py-4">
-                    <h1 class="fw-bolder">
-                        Wazza Email Phishing Tool: <br/>
-                        Advanced Phishing Detection Tool
-                    </h1>
-                    <p>
-                        This platform helps users detect phishing emails by analyzing 
-                        email content using machine learning and NLP algorithms 
-                        <p>All data is secured and private, with encryption ensuring your uploads are safe.</p>
-                    </p>
-                </div>
-            </div>
-        </section>
-        <section class="row">
-            <div class="col-12 col-md-4">
-                <div class="d-flex border p-4 rounded-3">
-                    <i class="bi bi-envelope-arrow-up-fill"></i>
-                    <div class="ps-3">
-                        <h3>Email</h3>
-                        <p>
-                            Securely Upload your Mails
-                        </p>
-                    </div>
-                </div>
-            </div>
 
-            <div class="col-12 col-md-4">
-                <div class="d-flex border p-4 rounded-3">
-                    <i class="bi bi-robot"></i>
-                    <div class="ps-3"> 
-                        <h3>Analysis</h3>
-                        <p>
-                            Analyze using advance machine tool.
-                        </p>
-                    </div>
-                </div>
-            </div>
+<section class="relative overflow-hidden bg-[#0b0f19] text-white">
 
-            <div class="col-12 col-md-4">
-                <div class="d-flex border p-4 rounded-3">
-                    <i class="bi bi-flag-fill"></i>
-                    <div class="ps-3">
-                        <h3>Report</h3>
-                        <p>
-                            Get a well detailed report
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </section>
+  <!-- Neon cyber grid background -->
+  <div class="absolute inset-0 -z-10 opacity-20"
+       style="background-image: url('https://www.transparenttextures.com/patterns/cubes.png');"></div>
 
-        <section class="row">
-            <div class="col-12 col-sm-8 col-md-6 mx-auto text-center pt-5">
-                <a href="{% url 'scan_email' %}" class="btn btn-lg btn-light py-3 px-5 shadow fw-bolder">
-                    Scan Now
-                </a>
-            </div>
-        </section>
+  <!-- Aura Glow -->
+  <div class="absolute top-1/2 left-1/2 -z-10 w-[1000px] h-[1000px]
+              bg-gradient-to-br from-[#b44cff]/40 to-[#ff3fa4]/40
+              blur-[200px] rounded-full -translate-x-1/2 -translate-y-1/2"></div>
+
+  <div class="max-w-7xl mx-auto px-6 pt-24 pb-32 text-center">
+
+    <!-- Title -->
+    <h1 class="text-5xl md:text-7xl font-extrabold leading-tight mb-6">
+      <span class="bg-gradient-to-r from-[#ff3fa4] to-[#b44cff]
+                   bg-clip-text text-transparent drop-shadow-[0_0_25px_#b44cff]">
+        AI-Powered
+      </span>
+      <span class="text-white">Phishing Detection</span>
+    </h1>
+
+    <!-- Subtitle -->
+    <p class="text-lg md:text-xl text-gray-300 max-w-3xl mx-auto mb-10 leading-relaxed">
+      Real-time threat analysis using Machine Learning, NLP behavioral forensics,
+      sender trust scoring & encrypted verification workflows.
+    </p>
+
+    <!-- CTA Button -->
+    <a href="{% url 'scan_email' %}"
+       class="inline-block px-10 py-4 text-lg font-semibold rounded-full
+              bg-gradient-to-r from-[#ff3fa4] to-[#b44cff]
+              text-white shadow-[0_0_25px_#b44cffaa]
+              hover:shadow-[0_0_45px_#ff3fa4dd]
+              transition-all duration-300 hover:scale-[1.06]">
+      Scan Email Now
+    </a>
+
+    <!-- Feature Cards -->
+    <div class="mt-24 grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+
+      <!-- Card 1 -->
+      <div class="p-8 rounded-2xl bg-white/5 backdrop-blur-lg border border-white/10
+                  hover:border-[#ff3fa4]/60 transition-all hover:scale-[1.04]
+                  shadow-[0_0_25px_#9d4dff11] hover:shadow-[0_0_35px_#b44cff55]">
+        <div class="text-4xl mb-4">🔒</div>
+        <h3 class="text-xl font-semibold text-[#ff69d9] mb-2">Encrypted Submission</h3>
+        <p class="text-sm text-gray-300">Your email data never leaves your secure environment.</p>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="p-8 rounded-2xl bg-white/5 backdrop-blur-lg border border-white/10
+                  hover:border-[#b44cff]/60 transition-all hover:scale-[1.04]
+                  shadow-[0_0_25px_#b44cff22] hover:shadow-[0_0_35px_#ff3fa455]">
+        <div class="text-4xl mb-4">🤖</div>
+        <h3 class="text-xl font-semibold text-[#b44cff] mb-2">AI Fraud Analysis</h3>
+        <p class="text-sm text-gray-300">Detects manipulative tone, spoofed identity & suspicious intent.</p>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="p-8 rounded-2xl bg-white/5 backdrop-blur-lg border border-white/10
+                  hover:border-[#ff3fa4]/60 transition-all hover:scale-[1.04]
+                  shadow-[0_0_25px_#ff3fa422] hover:shadow-[0_0_35px_#b44cff55]">
+        <div class="text-4xl mb-4">📊</div>
+        <h3 class="text-xl font-semibold text-[#ff3fa4] mb-2">Threat Score Dashboard</h3>
+        <p class="text-sm text-gray-300">Visual indicators explain *why* a message is suspicious.</p>
+      </div>
+
     </div>
+
+  </div>
 </section>
+
 {% endblock content %}
