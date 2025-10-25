@@ -1,52 +1,72 @@
 {% extends "account/base.html" %}
+{% load static %}
 {% load crispy_forms_tags %}
-{% load i18n %}
-
-{% block head_title %}
-{% trans "Signup" %}
-{% endblock %}
-
 {% block content %}
-<section class="container">
-  <div class="row">
-    <article class="col-12 col-md-7 mx-auto">
-      <form 
-        class="p-2 p-md-5" 
-        id="signup_form" method="post" 
-        enctype="multipart/form-data" 
-        action="{% url 'account_signup' %}"
-      >
-      <header class="pb-4 text-center">
-        <a 
-          href="{% url 'user_dashboard' %}" 
-          class="pb-1 fw-bolder"
-          style="text-shadow: 0 0 7px rgb(0,0,0,0.7);"
-        >
-          <h1 class="h3 fw-bolder">Begin Your Journey Today</h1>
-        </a>
-        
-        <p class="text-muted">
-          Start building your future
-          and fullfill your dreams today
-        </p>
-      </header>
-      {% csrf_token %}
-      {{ form |crispy }}
-      {% if redirect_field_value %}
-        <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
-      {% endif %}
-          
-        <button 
-          class="btn btn-success btn-lg col-12 col-md-7 shadow" 
-          type="submit"
-          style="font-weight: bolder;"
-        >
-          {% trans "CREATE ACCOUNT" %}
+
+<div class="min-h-screen grid grid-cols-1 md:grid-cols-2 bg-[#0b0f19]">
+
+  <!-- LEFT VISUAL PANEL -->
+  <div class="relative hidden md:flex items-center justify-center overflow-hidden">
+
+    <img src="{% static 'pages/images/cyberbackground1.jpg' %}"
+         class="absolute inset-0 w-full h-full object-cover object-center" alt="Cyber Security">
+
+    <!-- Soft Gradient Brand Overlay -->
+    <div class="absolute inset-0 bg-gradient-to-br from-[#b44cff]/40 to-[#ff3fa4]/40 mix-blend-overlay"></div>
+
+    <!-- Center Text -->
+    <div class="relative z-10 px-12">
+      <h1 class="text-5xl font-bold text-white leading-tight drop-shadow-[0_0_18px_#b44cffaa]">
+        Begin Your Secure Journey
+      </h1>
+      <p class="mt-4 text-pink-200 text-lg font-light tracking-wide">
+        Encrypted • Private • YingYang Cyber Strength
+      </p>
+    </div>
+
+  </div>
+
+  <!-- RIGHT SIGNUP FORM -->
+  <div class="flex items-center justify-center px-8 py-16">
+
+    <div class="w-full max-w-md bg-white/10 backdrop-blur-xl border border-white/20
+                p-10 rounded-3xl shadow-[0_0_45px_#b44cff33]
+                animate-[fadeIn_0.9s_ease]">
+
+      <!-- Gradient Title -->
+      <h2 class="text-center text-3xl font-extrabold bg-gradient-to-r from-[#ff3fa4] to-[#b44cff] bg-clip-text text-transparent">
+        Create Your Account
+      </h2>
+
+      <p class="text-center text-gray-300 mt-2 mb-8 text-sm">
+        Secure access begins here
+      </p>
+
+      <form method="POST" action="{% url 'account_signup' %}" class="space-y-6">
+        {% csrf_token %}
+        {{ form|crispy }}
+
+        <button
+          class="w-full py-3 rounded-full font-semibold
+                 bg-gradient-to-r from-[#ff3fa4] to-[#b44cff]
+                 text-white shadow-[0_0_20px_#ff3fa4aa]
+                 hover:shadow-[0_0_38px_#b44cffbb]
+                 hover:scale-[1.05] transition-all duration-300">
+          Create Account
         </button>
       </form>
 
-    </article>
+      <p class="text-center text-gray-300 mt-6 text-sm">
+        Already have an account?
+        <a href="{% url 'account_login' %}" class="text-[#ff69d9] hover:underline">
+          Sign In
+        </a>
+      </p>
+
+    </div>
+
   </div>
-</section>
+
+</div>
 
 {% endblock %}
