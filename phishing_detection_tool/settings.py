@@ -45,6 +45,7 @@ INSTALLED_APPS = [
 
     "crispy_forms",
     "crispy_bootstrap5",
+    "crispy_tailwind",
 
     'allauth',
     'allauth.account',
@@ -132,9 +133,8 @@ USE_I18N = True
 USE_TZ = True
 
 # Crispy forms
-CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
-
-CRISPY_TEMPLATE_PACK = "bootstrap5"
+CRISPY_ALLOWED_TEMPLATE_PACKS = ("bootstrap4", "tailwind")
+CRISPY_TEMPLATE_PACK = "tailwind"
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
