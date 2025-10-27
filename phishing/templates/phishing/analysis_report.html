@@ -12,6 +12,25 @@
         <p class="text-gray-500 mt-1">Detailed phishing detection analysis on every scanned email.</p>
     </header>
 
+    <div class="flex justify-end mt-2">
+        <form method="GET" class="flex items-center gap-2">
+
+            <select name="sort" onchange="this.form.submit()"
+            class="px-4 py-2 rounded-xl border border-gray-200 bg-white shadow-sm focus:ring-2 focus:ring-pink-400 focus:outline-none text-gray-700 text-sm">
+            <option value="newest" {% if sort == 'newest' %}selected{% endif %}>Newest First</option>
+            <option value="oldest" {% if sort == 'oldest' %}selected{% endif %}>Oldest First</option>
+            <option value="high" {% if sort == 'high' %}selected{% endif %}>High Risk First</option>
+            <option value="low" {% if sort == 'low' %}selected{% endif %}>Low Risk First</option>
+            </select>
+
+            {% if page_obj.number > 1 %}
+            <input type="hidden" name="page" value="{{ page_obj.number }}">
+            {% endif %}
+
+        </form>
+        </div>
+
+
     <div class="overflow-x-auto rounded-2xl border border-gray-100 bg-white shadow-xl">
         <table class="w-full border-collapse text-sm">
             <thead>
@@ -24,7 +43,7 @@
             </thead>
 
             <tbody class="divide-y divide-gray-100">
-                {% for report in reports %}
+                {% for report in page_obj %}
 
                 <!-- Modal -->
                 <dialog id="modal-{{report.id}}" class="modal">
@@ -49,7 +68,7 @@
 
                             <div class="flex justify-between items-center p-3 bg-gray-50 rounded-xl">
                                 <span class="text-gray-600 font-medium">Date Scanned</span>
-                                <span class="font-semibold text-gray-800">{{report.created_at}}</span>
+                                <span class="font-semibold text-gray-800">{{report.created_at|date:"M d, Y • h:i A"}}</span>
                             </div>
 
                             <div class="p-3 bg-gray-50 rounded-xl">
@@ -98,7 +117,7 @@
                         {% endif %}
                     </td>
 
-                    <td class="py-4 px-6 text-gray-700">{{report.created_at}}</td>
+                    <td class="py-4 px-6 text-gray-700">{{report.created_at|date:"M d, Y"}}</td>
 
                     <td class="py-4 px-6 text-center">
                         <button onclick="document.getElementById('modal-{{report.id}}').showModal()" 
@@ -120,5 +139,62 @@
 
 </div>
 </section>
+
+{% if page_obj.has_other_pages %}
+<div class="mt-10 flex justify-center">
+  <div class="flex items-center gap-2 px-4 py-3 rounded-xl bg-white/60 backdrop-blur-sm border border-gray-200 shadow-md">
+
+    {# First Page #}
+    {% if page_obj.number > 2 %}
+    <a href="?page=1"
+      class="px-4 py-2 rounded-lg text-sm font-medium border border-gray-200 bg-white hover:bg-gray-50 hover:shadow transition">
+      First
+    </a>
+    {% endif %}
+
+    {# Previous #}
+    {% if page_obj.has_previous %}
+    <a href="?page={{ page_obj.previous_page_number }}"
+      class="p-2 rounded-lg border border-gray-200 bg-white hover:bg-gray-50 hover:shadow transition">
+      <i class="ri-arrow-left-line text-lg"></i>
+    </a>
+    {% else %}
+    <button
+      class="p-2 rounded-lg border border-gray-100 bg-gray-100 cursor-not-allowed opacity-50">
+      <i class="ri-arrow-left-line text-lg"></i>
+    </button>
+    {% endif %}
+
+    {# Current Page #}
+    <div
+      class="px-6 py-2 rounded-lg font-semibold text-white bg-gradient-to-r from-pink-500 to-purple-600 shadow-md hover:shadow-lg hover:brightness-110 transition">
+      Page {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}
+    </div>
+
+    {# Next #}
+    {% if page_obj.has_next %}
+    <a href="?page={{ page_obj.next_page_number }}"
+      class="p-2 rounded-lg border border-gray-200 bg-white hover:bg-gray-50 hover:shadow transition">
+      <i class="ri-arrow-right-line text-lg"></i>
+    </a>
+    {% else %}
+    <button
+      class="p-2 rounded-lg border border-gray-100 bg-gray-100 cursor-not-allowed opacity-50">
+      <i class="ri-arrow-right-line text-lg"></i>
+    </button>
+    {% endif %}
+
+    {# Last Page #}
+    {% if page_obj.number < page_obj.paginator.num_pages|add:"-1" %}
+    <a href="?page={{ page_obj.paginator.num_pages }}"
+      class="px-4 py-2 rounded-lg text-sm font-medium border border-gray-200 bg-white hover:bg-gray-50 hover:shadow transition">
+      Last
+    </a>
+    {% endif %}
+    
+  </div>
+</div>
+{% endif %}
+
 
 {% endblock %}
