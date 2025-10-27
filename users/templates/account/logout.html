@@ -1,25 +1,49 @@
-{% extends "account/base.html" %} {% load static %} {% load i18n %} {% block head_title %}{% trans "Sign Out" %}{% endblock %} {% block content %}
+{% extends "account/base.html" %}
+{% load static %}
+{% load i18n %}
 
-<div class="container flex-fill">
-    <div class="row">
-        <div class="col-12 col-md-6 mx-auto text-center py-5">
-            <div style="height: 55vh" class="d-flex flex-column justify-content-center">
-                <h1>{% trans "Sign Out" %}</h1>
+{% block head_title %}{% trans "Sign Out" %}{% endblock %}
 
-                <p>{% trans 'Are you sure you want to sign out?' %}</p>
+{% block content %}
 
-                <form method="post" action="{% url 'account_logout' %}">
-                    {% csrf_token %} {% if redirect_field_value %}
-                    <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" /> {% endif %}
-                    <button type="submit" class="btn btn-danger btn-lg">
-            {% trans 'Sign Out' %}
-          </button>
-                </form>
-            </div>
+<div class="min-h-[75vh] flex items-center justify-center bg-roseSoft/30 px-4">
+
+  <div class="bg-white/90 card-soft border border-lilacSoft shadow-md rounded-2xl p-10 text-center max-w-md w-full">
+      
+      <!-- Icon -->
+      <div class="flex justify-center mb-4">
+        <div class="w-16 h-16 rounded-full bg-roseSoft flex items-center justify-center">
+          <i class="ri-logout-circle-r-line text-3xl text-roseDeep"></i>
         </div>
-    </div>
+      </div>
+
+      <h1 class="text-2xl font-semibold text-neutral-700 mb-2">
+        {% trans "Sign Out" %}
+      </h1>
+
+      <p class="text-neutral-500 mb-6">
+        {% trans "Are you sure you want to sign out?" %}
+      </p>
+
+      <form method="post" action="{% url 'account_logout' %}">
+          {% csrf_token %}
+          {% if redirect_field_value %}
+            <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+          {% endif %}
+
+          <button type="submit" 
+            class="px-6 py-3 rounded-xl bg-roseDeep text-white font-medium hover:bg-roseDeep/80 transition-all duration-200 w-full flex items-center justify-center gap-2">
+            <i class="ri-logout-box-r-line text-xl"></i>
+            {% trans "Sign Out" %}
+          </button>
+      </form>
+
+      <a href="javascript:history.back()" 
+        class="block text-sm mt-5 text-neutral-500 hover:text-roseDeep transition">
+        Cancel and return
+      </a>
+  </div>
+
 </div>
-
-
 
 {% endblock %}
