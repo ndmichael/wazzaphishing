@@ -40,7 +40,7 @@
 
         {% if request.user.is_authenticated %}
 
-          <a href="{% url 'dashboard' %}" 
+          <a href="{% url 'user_dashboard' %}" 
             class="hover:text-[#ff69d9] transition">
             Dashboard
           </a>
@@ -77,7 +77,7 @@
     <div id="mobileMenu" class="hidden flex-col bg-[#0b0f19]/95 backdrop-blur-xl border-b border-[#b44cff33] py-4 px-6 text-center text-gray-300 space-y-4 md:hidden">
 
       {% if request.user.is_authenticated %}
-        <a href="{% url 'dashboard' %}" class="hover:text-[#ff69d9] transition block">Dashboard</a>
+        <a href="{% url 'user_dashboard' %}" class="hover:text-[#ff69d9] transition block">Dashboard</a>
         <a href="{% url 'account_logout' %}"
           class="px-5 py-2 rounded-full border border-[#b44cff66]
           text-[#ff69d9] hover:bg-gradient-to-r hover:from-[#ff3fa4] hover:to-[#b44cff]
@@ -131,33 +131,30 @@
 <!-- Tailwind css with Daisy UI -->
 <script>
   tailwind.config = {
-    theme: {
-      extend: {
-        colors: {
-          neon: "#00ff9d",
-        }
-      }
-    },
     plugins: [daisyui],
     daisyui: {
       themes: [
         {
-          phishing: {
-            "primary": "#00ff9d",
-            "secondary": "#121212",
-            "accent": "#00ff9d",
-            "neutral": "#1c1c1c",
-            "base-100": "#0b0b0b",
-            "info": "#00c6ff",
-            "success": "#00ff9d",
-            "warning": "#ffbe0b",
-            "error": "#ff3860",
-          }
-        }
-      ]
-    }
+          rukky: {
+            "primary": "#c026d3",      /* Purple */
+            "secondary": "#ec4899",    /* Pink */
+            "accent": "#a855f7",
+            "neutral": "#1f1f1f",
+            "base-100": "#ffffff",
+            "base-200": "#f4f0ff",
+            "base-300": "#e7dbff",
+            "info": "#3abff8",
+            "success": "#36d399",
+            "warning": "#fbbd23",
+            "error": "#f87272",
+          },
+        },
+        "dark",   /* fallback theme */
+      ],
+    },
   }
 </script>
+
 
 <script>
   const navToggle = document.getElementById("navToggle");
