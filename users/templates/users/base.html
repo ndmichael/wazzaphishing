@@ -40,6 +40,12 @@
   <!-- DaisyUI (optional but useful) -->
   <script src="https://cdn.jsdelivr.net/npm/daisyui@2.51.5/dist/full.js"></script>
 
+
+  <!-- Alertify CSS -->
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.14.0/build/css/alertify.min.css"/>
+  <!-- Default theme -->
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.14.0/build/css/themes/default.min.css"/>
+
   <!-- Remix icons -->
   <link href="https://cdn.jsdelivr.net/npm/remixicon@4.1.0/fonts/remixicon.css" rel="stylesheet">
 
@@ -135,6 +141,16 @@
 
   <!-- content area -->
   <main class="p-6 space-y-6" style="background: linear-gradient(90deg, #FCE7F3 0%, #F3E8FF 100%);">
+
+    <!-- Alertify JavaScript -->
+    <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.14.0/build/alertify.min.js"></script>
+
+    {% for message in messages %}
+        <script>
+                alertify.set('notifier','position', 'top-right');
+                alertify.{{message.tags}}('{{message}}');
+        </script>    
+    {% endfor %}
 
     {% block content %}
     {% endblock %}
