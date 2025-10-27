@@ -1,4 +1,13 @@
 
+input, select, textarea {
+@apply rounded-xl bg-base-200 border border-primary/40 text-gray-100 focus:border-primary focus:ring-primary transition;
+}
+
+.btn-accent {
+@apply bg-primary text-black font-semibold;
+}
+
+
 
 .account-content{
     padding: 2rem 10px;
