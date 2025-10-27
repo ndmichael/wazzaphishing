@@ -71,8 +71,8 @@
         <table class="table w-full">
             <thead>
                 <tr>
-                    <th>Email</th>
-                    <th>Risk</th>
+                    <th>Email Subject</th>
+                    <th>Risk Levl</th>
                     <th>Date</th>
                 </tr>
             </thead>
@@ -80,9 +80,19 @@
                 {% if recent_reports %}
                     {% for r in recent_reports %}
                     <tr>
-                        <td>{{ r.email }}</td>
-                        <td>{{ r.risk }}</td>
-                        <td>{{ r.date }}</td>
+                        <td>{{ r.email.extracted_subject }}</td>
+                        <td>
+                        <div class="flex justify-between items-center p-3 bg-gray-50 rounded-xl">
+                                {% if r.risk_level == "Low" %}
+                                <span class="px-3 py-1 text-xs rounded-full bg-green-100 text-green-700 font-semibold">{{r.risk_level}}</span>
+                                {% elif r.risk_level == "Medium" %}
+                                <span class="px-3 py-1 text-xs rounded-full bg-yellow-100 text-yellow-700 font-semibold">{{r.risk_level}}</span>
+                                {% else %}
+                                <span class="px-3 py-1 text-xs rounded-full bg-red-100 text-red-700 font-semibold">{{r.risk_level}}</span>
+                                {% endif %}
+                            </div>
+                        </td>
+                        <td>{{ r.created_at|date:"M d, Y" }}</td>
                     </tr>
                     {% endfor %}
                 {% else %}
