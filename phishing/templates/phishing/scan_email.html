@@ -1,49 +1,57 @@
-{% extends 'users/base.html' %} 
-{% load static %} 
+{% extends 'users/base.html' %}
+{% load static %}
 {% load crispy_forms_tags %}
 
 {% block content %}
-<section>
-    <div class="container">
-        <section class="row">
-            <div id="form-container" class="col-12 col-md-10 mx-auto">
-                <header>
-                    <h1>Upload Email for Scanning</h1>
-                    <p>Only .txt or .eml files are accepted in this form</p>
-                </header>
-                <form 
-                    method="POST" 
-                    enctype="multipart/form-data"
-                    class="border border-success shadow p-5 bg-light"
-                    id="detect-form"
-                >
-                    {% csrf_token %}
-                    {% crispy form %}
-                    <button type="submit" class="btn btn-success btn-lg">Analyze Email</button>
-                </form>
-            </div>
 
-            <div class="col-12 col-md-8 mx-auto mt-5">
-                <!-- Loading Spinner -->
-                <div id="loading" class="text-center hidden">
-                    <p>Detection in progress, Please wait...</p>
-                    <div class="spinner-border text-success" role="status">
-                        <span class="sr-only"></span>
-                      </div>
-                </div>
+<section class="py-10 px-6">
+  <div class="max-w-4xl mx-auto">
 
-                <!-- Result Section -->
-                <div id="result" class="hidden">
-                    <h2>Analysis Report</h2>
-                    <p>
-                        <strong>Risk Level:</strong> <span id="risk-level"></span>
-                    </p>
-                    <p><strong>Flagged Words:</strong> <span id="flagged-words"></span></p>
-                    <p><strong>URLs:</strong></p>
-                    <ul id="urls-list" class="list-group"></ul>
-                </div>
-            </div>
-        </section>
-    </div>
+      <header class="mb-8">
+        <h1 class="text-3xl font-semibold text-gray-800">Upload Email for Scanning</h1>
+        <p class="text-gray-500">Supported formats: <strong>.txt</strong> or <strong>.eml</strong></p>
+      </header>
+
+      <form 
+        method="POST" 
+        enctype="multipart/form-data"
+        id="detect-form"
+        class="bg-white border border-roseSoft shadow-lg p-8 rounded-xl space-y-6"
+      >
+        {% csrf_token %}
+        {% crispy form %}
+
+        <button 
+          type="submit"
+          class="px-6 py-3 rounded-xl text-white font-medium shadow-md hover:shadow-lg hover:scale-[1.02] transition flex items-center gap-2"
+          style="background: linear-gradient(135deg, #FDB7D2, #DB2777);"
+        >
+          <i class="ri-mail-search-line text-lg"></i>
+          Analyze Email
+        </button>
+      </form>
+
+      <!-- Loading Spinner -->
+      <div id="loading" class="text-center mt-6 hidden">
+        <p class="text-gray-600 mb-3">Detection in progress, please wait...</p>
+        <span class="loading loading-ring loading-lg text-roseDeep"></span>
+      </div>
+
+      <!-- Result Section -->
+      <div id="result" class="hidden bg-white p-6 rounded-xl shadow mt-10 space-y-4">
+        <h2 class="text-2xl font-semibold text-gray-800">Analysis Report</h2>
+
+        <p><strong>Risk Level:</strong> <span id="risk-level" class="font-semibold"></span></p>
+
+        <p><strong>Flagged Words:</strong> 
+          <span id="flagged-words" class="font-semibold"></span>
+        </p>
+
+        <p><strong>URLs:</strong></p>
+        <ul id="urls-list" class="list-disc pl-6 text-gray-700"></ul>
+      </div>
+
+  </div>
 </section>
+
 {% endblock %}
