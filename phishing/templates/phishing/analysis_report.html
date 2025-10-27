@@ -1,118 +1,124 @@
-{% extends 'users/base.html' %} 
-{% load static %} 
+{% extends 'users/base.html' %}
+{% load static %}
 {% load crispy_forms_tags %}
 
 {% block content %}
-<section>
-    <div class="container">
-        <section class="row">
-            <div class="col-12 col-md-10 mx-auto">
-                <header>
-                    <h1 class="display-4">Your Scanning Reports</h1>
-                    <p>All your reports....</p>
-                </header>
-            </div>
 
-            <div class="col-12 col-md-10 mx-auto">
-                <div class="table-responsive p-4 bg-white shadow-sm rounded-5">
-                    <table class="table">
-                        <thead class="thead-dark">
-                            <tr>
-                                <th scope="col">Email  Subject</th>
-                                <th scope="col">Risk Level</th>
-                                <th scope="col">Date</th>
-                                <th scope="col">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for report in reports %}
-                                <div class="modal fade" id="report-{{report.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                        <h1 class="modal-title fs-5" id="exampleModalLabel">
-                                            {{report.email.extracted_subject}}
-                                        </h1>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <div class="d-flex justify-content-between">
-                                                <p>Risk Level:</p>
-                                                {% if report.risk_level == "Low" %}
-                                                <p class="text-end fw-bolder text-success">{{report.risk_level}}</p>
-                                                {% elif report.risk_level == "Medium" %}
-                                                <p class="text-end fw-bolder text-primary">{{report.risk_level}}</p>
-                                                {% elif report.risk_level == "High" %}
-                                                <p class="text-end fw-bolder text-danger">{{report.risk_level}}</p>
-                                                {% endif %}
-                                            </div>
+<section class="px-6 md:px-12 py-12">
+<div class="max-w-6xl mx-auto space-y-6">
 
-                                            <div class="d-flex justify-content-between">
-                                                <p>Date:</p>
-                                                <p class="text-end fw-bolder">{{report.created_at}}</p>
-                                            </div>
+    <header>
+        <h1 class="text-4xl font-extrabold text-gray-900 tracking-tight">Scanning Reports</h1>
+        <p class="text-gray-500 mt-1">Detailed phishing detection analysis on every scanned email.</p>
+    </header>
 
-                                            <div class="d-flex justify-content-between">
-                                                <p>Score:</p>
-                                                <p class="text-end fw-bolder">
-        
-                                                    {% for flagged_words in report.phishing_indicators.flagged_words %}
-                                                        <span> {{ flagged_words }}, </span>
-                                                    {% empty %}
-                                                        <p>No flagged words.</p>
-                                                    {% endfor %}
-                                                </p>
-                                            </div>
+    <div class="overflow-x-auto rounded-2xl border border-gray-100 bg-white shadow-xl">
+        <table class="w-full border-collapse text-sm">
+            <thead>
+                <tr class="bg-roseSoft text-gray-700 text-left">
+                    <th class="py-4 px-6 font-semibold">Email Subject</th>
+                    <th class="py-4 px-6 font-semibold">Risk Level</th>
+                    <th class="py-4 px-6 font-semibold">Date</th>
+                    <th class="py-4 px-6 text-center font-semibold">Action</th>
+                </tr>
+            </thead>
 
-                                            <div class="d-flex justify-content-between">
-                                                <p>Total urls:</p>
-                                                <p class="text-end fw-bolder">
-                                                    {{report.phishing_indicators.flagged_words|length}} urls
-                                                </p>
-                                            </div>
-                                        </div>
-                                        <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                        </div>
-                                    </div>
-                                    </div>
+            <tbody class="divide-y divide-gray-100">
+                {% for report in reports %}
+
+                <!-- Modal -->
+                <dialog id="modal-{{report.id}}" class="modal">
+                    <div class="modal-box max-w-xl rounded-2xl bg-white shadow-2xl p-6 space-y-6 border border-gray-100">
+
+                        <h2 class="text-2xl font-bold text-gray-900">
+                            <i class="ri-mail-line text-roseDeep mr-2"></i>{{ report.email.extracted_subject }}
+                        </h2>
+
+                        <div class="space-y-4">
+
+                            <div class="flex justify-between items-center p-3 bg-gray-50 rounded-xl">
+                                <span class="text-gray-600 font-medium">Risk Level</span>
+                                {% if report.risk_level == "Low" %}
+                                <span class="px-3 py-1 text-xs rounded-full bg-green-100 text-green-700 font-semibold">{{report.risk_level}}</span>
+                                {% elif report.risk_level == "Medium" %}
+                                <span class="px-3 py-1 text-xs rounded-full bg-yellow-100 text-yellow-700 font-semibold">{{report.risk_level}}</span>
+                                {% else %}
+                                <span class="px-3 py-1 text-xs rounded-full bg-red-100 text-red-700 font-semibold">{{report.risk_level}}</span>
+                                {% endif %}
+                            </div>
+
+                            <div class="flex justify-between items-center p-3 bg-gray-50 rounded-xl">
+                                <span class="text-gray-600 font-medium">Date Scanned</span>
+                                <span class="font-semibold text-gray-800">{{report.created_at}}</span>
+                            </div>
+
+                            <div class="p-3 bg-gray-50 rounded-xl">
+                                <span class="text-gray-600 font-medium block">Flagged Words</span>
+                                <div class="mt-2 flex flex-wrap gap-2">
+                                    {% for word in report.phishing_indicators.flagged_words %}
+                                    <span class="px-3 py-1 text-xs rounded-lg bg-lilacSoft text-purple-700">{{ word }}</span>
+                                    {% empty %}
+                                    <span class="text-gray-500 text-sm">None detected</span>
+                                    {% endfor %}
                                 </div>
-                              
-                                <tr>
-                                    <td>{{report.email.extracted_subject}}</td>
-                                    <td>
-                                        {% if report.risk_level == "Low" %}
-                                        <p class="fw-bolder text-success">{{report.risk_level}}</p>
-                                        {% elif report.risk_level == "Medium" %}
-                                        <p class="fw-bolder text-primary">{{report.risk_level}}</p>
-                                        {% elif report.risk_level == "High" %}
-                                        <p class="fw-bolder text-danger">{{report.risk_level}}</p>
-                                        {% endif %}
-                                    </td>
-                                    <td>{{report.created_at}}</td>
-                                    <td>
-                                        <a 
-                                            href=""
-                                            data-bs-toggle="modal" 
-                                            data-bs-target="#report-{{report.id}}"
-                                            data-toggle="tooltip" 
-                                            data-placement="bottom" 
-                                            title="Report Details"
-                                        >
-                                            <i class="bi bi-app-indicator text-success fw-bolder" style="font-size: 28px;"></i>
-                                        </a>
-                                    </td>
-                                </tr>
-                            {% empty %}
-                            <tr>
-                                <h2 class="alert alert-info">No Reports</h2>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table> 
-                </div>
-            </div>
-        </section>
+                            </div>
+
+                            <div class="flex justify-between items-center p-3 bg-gray-50 rounded-xl">
+                                <span class="text-gray-600 font-medium">Total URLs</span>
+                                <span class="font-semibold">{{report.phishing_indicators.flagged_words|length}}</span>
+                            </div>
+
+                        </div>
+
+                        <div class="modal-action">
+                            <form method="dialog">
+                                <button class="px-5 py-2 rounded-xl bg-gray-800 text-white hover:bg-black transition flex items-center gap-2">
+                                    <i class="ri-close-line text-lg"></i> Close
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                    <form method="dialog" class="modal-backdrop"><button></button></form>
+                </dialog>
+                
+                <tr class="hover:bg-gray-50 transition">
+
+                    <td class="py-4 px-6 flex items-center gap-2 font-medium text-gray-800">
+                        <i class="ri-mail-line text-roseDeep text-lg"></i>
+                        {{report.email.extracted_subject}}
+                    </td>
+
+                    <td class="py-4 px-6">
+                        {% if report.risk_level == "Low" %}
+                        <span class="px-3 py-1 text-xs rounded-full bg-green-100 text-green-700 font-semibold">{{report.risk_level}}</span>
+                        {% elif report.risk_level == "Medium" %}
+                        <span class="px-3 py-1 text-xs rounded-full bg-yellow-100 text-yellow-700 font-semibold">{{report.risk_level}}</span>
+                        {% else %}
+                        <span class="px-3 py-1 text-xs rounded-full bg-red-100 text-red-700 font-semibold">{{report.risk_level}}</span>
+                        {% endif %}
+                    </td>
+
+                    <td class="py-4 px-6 text-gray-700">{{report.created_at}}</td>
+
+                    <td class="py-4 px-6 text-center">
+                        <button onclick="document.getElementById('modal-{{report.id}}').showModal()" 
+                        class="px-4 py-2 rounded-xl bg-roseDeep text-white hover:bg-pink-700 transition shadow flex items-center gap-2 mx-auto">
+                            <i class="ri-eye-line text-lg"></i> View
+                        </button>
+                    </td>
+
+                </tr>
+
+                {% empty %}
+                <tr>
+                    <td colspan="4" class="py-8 text-center text-gray-500">No Scanning Reports Found</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
+
+</div>
 </section>
+
 {% endblock %}
