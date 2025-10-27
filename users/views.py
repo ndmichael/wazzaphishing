@@ -7,6 +7,7 @@ from phishing.models import PhishingReport
 @login_required
 def user_dashboard(request):
     total_phishing = PhishingReport.objects.all().count
+    recent_reports  = PhishingReport.objects.filter(email__user=request.user).order_by("-created_at")[:4]
 
     # Count phishing reports by risk level
     risk_counts = PhishingReport.objects.values('risk_level').annotate(count=Count('risk_level'))
@@ -15,7 +16,8 @@ def user_dashboard(request):
     context ={
         "title": "user dashboard",
         "total_phishing" :total_phishing,
-        'risk_data': risk_data
+        'risk_data': risk_data,
+        'recent_reports': recent_reports
     }
     return render(request, "users/user_dashboard.html", context)
 
