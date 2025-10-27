@@ -9,6 +9,8 @@ import re
 from django.template.loader import render_to_string
 from django.http import JsonResponse
 from django.contrib import messages
+from django.core.paginator import Paginator
+from django.db.models import Case, When, Value, IntegerField
 
 @login_required
 def scan_email(request):
@@ -102,13 +104,46 @@ def scan_email(request):
 
 @login_required
 def analysis_report(request):
-    reports  = PhishingReport.objects.filter(email__user=request.user).order_by("-created_at")
+    sort = request.GET.get("sort", "newest")  # default sort
+    reports = PhishingReport.objects.filter(email__user=request.user)
 
-    context ={
+    # Sorting logic
+    if sort == "high":
+        reports = reports.annotate(
+            sort_order=Case(
+                When(risk_level="High", then=Value(1)),
+                When(risk_level="Medium", then=Value(2)),
+                When(risk_level="Low", then=Value(3)),
+                output_field=IntegerField(),
+            )
+        ).order_by("sort_order", "-created_at")
+
+    elif sort == "low":
+        reports = reports.annotate(
+            sort_order=Case(
+                When(risk_level="Low", then=Value(1)),
+                When(risk_level="Medium", then=Value(2)),
+                When(risk_level="High", then=Value(3)),
+                output_field=IntegerField(),
+            )
+        ).order_by("sort_order", "-created_at")
+
+    elif sort == "oldest":
+        reports = reports.order_by("created_at")
+
+    else:  # newest
+        reports = reports.order_by("-created_at")
+
+    paginator = Paginator(reports, 7)
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+
+    context = {
         "title": "analysis report",
-        "reports": reports
+        "page_obj": page_obj,
+        "sort": sort,
     }
-    
+
     return render(request, "phishing/analysis_report.html", context)
 
 
