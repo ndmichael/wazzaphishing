@@ -34,6 +34,13 @@ def scan_email(request):
                 email_instance.extracted_body = data.get('body', '')
                 email_instance.save()
             except Exception as e:
+                # Return JSON error for AJAX requests
+                if request.headers.get('X-Requested-With') == 'XMLHttpRequest' or request.accepts('application/json'):
+                    return JsonResponse({
+                        'success': False,
+                        'error': f"Failed to parse email file: {e}"
+                    }, status=400)
+                
                 form.add_error('email_file', f"Failed to parse email file: {e}")
                 context.update({"form": form})
                 return render(request, "phishing/scan_email.html", context)
@@ -52,8 +59,25 @@ def scan_email(request):
             )
 
             success = True
-            messages.success(request, "Email scanning completed successfully.")
+            
+            # Return JSON response for AJAX requests
+            if request.headers.get('X-Requested-With') == 'XMLHttpRequest' or request.accepts('application/json'):
+                return JsonResponse({
+                    'success': True,
+                    'risk_level': risk_level,
+                    'flagged_words': flagged_words,
+                    'urls': urls,
+                    'probability': float(probability) if probability is not None else None
+                })
         else:
+            # Return JSON error for AJAX requests
+            if request.headers.get('X-Requested-With') == 'XMLHttpRequest' or request.accepts('application/json'):
+                return JsonResponse({
+                    'success': False,
+                    'error': 'Invalid form submission.',
+                    'errors': form.errors
+                }, status=400)
+            
             messages.error(request, "Invalid form submission.")
     else:
         form = EmailUploadForm()
@@ -68,6 +92,61 @@ def scan_email(request):
     })
 
     return render(request, "phishing/scan_email.html", context)
+
+# @login_required
+# def scan_email(request):
+#     context = {"title": "scan email"}
+#     risk_level = flagged_words = urls = probability = None
+#     success = False
+
+#     if request.method == 'POST':
+#         form = EmailUploadForm(request.POST, request.FILES)
+
+#         if form.is_valid():
+#             email_instance = form.save(commit=False)
+#             email_instance.user = request.user
+
+#             try:
+#                 data = extract_email_content(request.FILES['email_file'])
+#                 email_instance.extracted_subject = data.get('subject')
+#                 email_instance.extracted_sender = data.get('sender')
+#                 email_instance.extracted_body = data.get('body', '')
+#                 email_instance.save()
+#             except Exception as e:
+#                 form.add_error('email_file', f"Failed to parse email file: {e}")
+#                 context.update({"form": form})
+#                 return render(request, "phishing/scan_email.html", context)
+
+#             # Predict & analyze
+#             risk_level, probability = determine_risk_level(
+#                 phishing_model, vectorizer, email_instance.extracted_body
+#             )
+#             flagged_words, urls = extract_indicators(email_instance.extracted_body)
+
+#             # Save report
+#             PhishingReport.objects.create(
+#                 email=email_instance,
+#                 risk_level=risk_level,
+#                 phishing_indicators={"flagged_words": flagged_words, "urls": urls},
+#             )
+
+#             success = True
+#             messages.success(request, "Email scanning completed successfully.")
+#         else:
+#             messages.error(request, "Invalid form submission.")
+#     else:
+#         form = EmailUploadForm()
+
+#     context.update({
+#         "form": form,
+#         "success": success,
+#         "risk_level": risk_level,
+#         "flagged_words": flagged_words,
+#         "urls": urls,
+#         "probability": probability,
+#     })
+
+#     return render(request, "phishing/scan_email.html", context)
 
 
 @login_required
