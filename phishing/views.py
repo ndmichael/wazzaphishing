@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from .forms import EmailUploadForm
 from phishing.utils.ml_model import vectorizer, phishing_model, MODEL_PATH, VECTORIZER_PATH
 from phishing.utils.process_email_file import extract_email_content
+from phishing.utils.utils_phishing import extract_indicators, determine_risk_level
 from django.core.exceptions import ValidationError
 from .models import UploadedEmail, PhishingReport
 import re
@@ -12,93 +13,60 @@ from django.contrib import messages
 from django.core.paginator import Paginator
 from django.db.models import Case, When, Value, IntegerField
 
+
 @login_required
 def scan_email(request):
+    context = {"title": "scan email"}
+    risk_level = flagged_words = urls = probability = None
+    success = False
+
     if request.method == 'POST':
         form = EmailUploadForm(request.POST, request.FILES)
+
         if form.is_valid():
             email_instance = form.save(commit=False)
             email_instance.user = request.user
-            
+
             try:
                 data = extract_email_content(request.FILES['email_file'])
-                # print(f"data: {data}")
-                subject = data.get('subject')
-                sender = data.get('sender')
-                body = data.get('body')
-
-                # print("body from view: ", body)
-
-                email_instance.extracted_subject = subject
-                email_instance.extracted_sender = sender
-                email_instance.extracted_body = body
+                email_instance.extracted_subject = data.get('subject')
+                email_instance.extracted_sender = data.get('sender')
+                email_instance.extracted_body = data.get('body', '')
                 email_instance.save()
             except Exception as e:
-                form.add_error('email_file', f"Failed to parse the email file: {e}")
-            
-            encoded_label = {'phishing': 1, 'legitimate': 0}
-            vectorized_text = vectorizer.transform([email_instance.extracted_body])
-            print("Feature vector non-zero values:", vectorized_text.nnz)
-            print("Vectorizer vocab sample:", list(vectorizer.vocabulary_.keys())[:50])
+                form.add_error('email_file', f"Failed to parse email file: {e}")
+                context.update({"form": form})
+                return render(request, "phishing/scan_email.html", context)
 
-            # # Step 3: Predict risk level using the ML model
-            risk_prediction = phishing_model.predict(vectorized_text)[0]
-            probability = phishing_model.predict_proba(vectorized_text)[0][1]  
-        
-            # Step 4: Map the prediction to risk levels
-            if int(risk_prediction) == 1 and probability >= 0.8:
-                risk_level = PhishingReport.HIGH 
-            elif str(risk_prediction) == '1' and probability >= 0.5:
-                risk_level = PhishingReport.MEDIUM
-            else:
-                risk_level = PhishingReport.LOW            
+            # Predict & analyze
+            risk_level, probability = determine_risk_level(
+                phishing_model, vectorizer, email_instance.extracted_body
+            )
+            flagged_words, urls = extract_indicators(email_instance.extracted_body)
 
-            # Step 5: Extract phishing indicators
-            phishing_keywords = [
-                "verify", "confirm", "update", "reset", "security alert", "unauthorized", "suspicious", "account locked",
-                "urgent", "immediately", "asap", "within 24 hours", "your account will be closed", "last warning", "final notice", "important",
-                "bank", "invoice", "payment", "refund", "billing", "statement", "wire transfer", "transaction", "amount",
-                "click here", "login now", "open attachment", "act now", "take action", "respond", "sign in",
-                "paypal", "apple", "google", "microsoft", "amazon", "netflix", "facebook", "irs", "support", "helpdesk",
-                "you have won", "congratulations", "free", "gift", "limited offer", "reward", "claim", "lucky"
-            ]
-
-            # flagged_words = [word for word in phishing_keywords if word in email_instance.extracted_body]
-            flagged_words = [word for word in phishing_keywords if re.search(rf"\b{word}\b", email_instance.extracted_body, re.IGNORECASE)]
-            urls = re.findall(r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', email_instance.extracted_body)
-
-            # Step 6: Create a phishing report
-            phishing_indicators = {
-                "flagged_words": flagged_words,
-                "urls": urls
-            }
-            phishing_report = PhishingReport(
+            # Save report
+            PhishingReport.objects.create(
                 email=email_instance,
                 risk_level=risk_level,
-                phishing_indicators=phishing_indicators,
-            )
-            phishing_report.save()
-            
-            messages.success(
-                request, f"Scanning success"
+                phishing_indicators={"flagged_words": flagged_words, "urls": urls},
             )
 
-            # Return JSON response
-            return JsonResponse({
-                'success': True,
-                'risk_level': risk_level,
-                'flagged_words': flagged_words,
-                'urls': urls,
-                "risk_percent": probability,
-            })
-        
+            success = True
+            messages.success(request, "Email scanning completed successfully.")
+        else:
+            messages.error(request, "Invalid form submission.")
     else:
         form = EmailUploadForm()
 
-    context ={
-        "title": "scan email",
-        "form": form
-    }
+    context.update({
+        "form": form,
+        "success": success,
+        "risk_level": risk_level,
+        "flagged_words": flagged_words,
+        "urls": urls,
+        "probability": probability,
+    })
+
     return render(request, "phishing/scan_email.html", context)
 
 
