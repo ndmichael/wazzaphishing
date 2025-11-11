@@ -1,93 +1,89 @@
 const form = document.getElementById('detect-form');
 const loading = document.getElementById('loading');
 const result = document.getElementById('result');
-const resultMessage = document.getElementById('result-message');
-const formContainer = document.getElementById('form-container');
-const submitButton = document.querySelector('button[type="submit"]');
 const risk_level = document.getElementById('risk-level');
 const flagged_words = document.getElementById('flagged-words');
 const urlsList = document.getElementById('urls-list');
+const submitButton = document.querySelector('button[type="submit"]');
 
 const formActionUrl = '/phishing/scan/email/';
 
-form.onsubmit = async (event) => {
+// Fallback for alertify if not loaded
+if (typeof alertify === 'undefined') {
+    window.alertify = {
+        error: (msg) => alert(msg),
+        success: (msg) => alert(msg)
+    };
+}
 
+form.onsubmit = async (event) => {
     event.preventDefault();
     const formData = new FormData(form);
     submitButton.disabled = true;
 
-     // Update UI
-    loading.classList.add('visible');
+    // Show loader
     loading.classList.remove('hidden');
-    // formContainer.classList.add('hidden');
-    // formContainer.classList.remove('visible');
-
-    // Define a minimum loader time of 1 minute (60,000 ms)
-    const minimumLoaderTime = new Promise((resolve) => setTimeout(resolve, 60000));
+    result.classList.add('hidden');
 
     try {
         const response = await fetch(formActionUrl, {
             method: 'POST',
             body: formData,
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
         });
 
         if (!response.ok) {
             throw new Error(`Server Error: ${response.status}`);
         }
-        else{
-            const data = await response.json();
-            
-            setTimeout(()=>{
-                loading.classList.add('hidden');
-                loading.classList.remove('visible');
-                result.classList.add('visible');
-                result.classList.remove('hidden');
 
-            }, 6000)
-            
-            // Update the analysis report
-            level =  data.risk_level;
-            risk_level.textContent =level
-            
-            // Apply colors based on risk level
-            if (level.toUpperCase() === "HIGH") {
-                risk_level.style.color = "red";
-            } else if (level.toUpperCase() === "MEDIUM") {
-                risk_level.style.color = "gold";
-            } else if (level.toUpperCase() === "LOW") {
-                risk_level.style.color = "green";
-            }
-            flagged_words.textContent = data.flagged_words.join(", ") || "None";
+        const data = await response.json();
 
-            // Display URLs
-            urlsList.innerHTML = '';
+        // Wait 30 seconds before showing result
+        await new Promise(resolve => setTimeout(resolve, 1000));
 
-            data.urls.forEach(url => {
-                const listItem = document.createElement('li');
-                listItem.classList.add('url-item')
-                listItem.classList.add('list-group-item');
-                const link = document.createElement('a');
-                link.href = url;
-                link.target = "_blank";
-                link.textContent = url;
-                listItem.appendChild(link);
-                urlsList.appendChild(listItem);
-            });
-
-            form.reset()
-        }
-        
-    } catch (error) {
-        alert("Error occured")
+        // Hide loader, show result
         loading.classList.add('hidden');
-        loading.classList.remove('visible');
-        formContainer.classList.add('visible');
-        formContainer.classList.remove('hidden');
-        // resultMessage.textContent = `An error occurred: ${error.message}`;
-        // result.classList.add('visible');
-        // result.classList.remove('hidden');
+        result.classList.remove('hidden');
+
+        // Fill in result section
+        const level = data.risk_level || "Unknown";
+        risk_level.textContent = level;
+
+        // Apply colors
+        if (level.toUpperCase() === "HIGH") risk_level.style.color = "red";
+        else if (level.toUpperCase() === "MEDIUM") risk_level.style.color = "gold";
+        else if (level.toUpperCase() === "LOW") risk_level.style.color = "green";
+
+        flagged_words.textContent = (data.flagged_words && data.flagged_words.join(", ")) || "None";
+
+        urlsList.innerHTML = "";
+        if (data.urls && data.urls.length > 0) {
+            data.urls.forEach(url => {
+                const li = document.createElement('li');
+                const a = document.createElement('a');
+                a.href = url;
+                a.target = "_blank";
+                a.textContent = url;
+                a.className = "text-pink-600 hover:text-pink-800 underline";
+                li.appendChild(a);
+                urlsList.appendChild(li);
+            });
+        } else {
+            urlsList.innerHTML = "<li class='text-gray-500'>No URLs detected</li>";
+        }
+
+        // Show success message
+        alertify.success("Email scanning completed successfully!");
+
+        form.reset();
+    } catch (error) {
+        console.error('Error:', error);
+        alertify.error("An error occurred: " + error.message);
+        loading.classList.add('hidden');
+        result.classList.add('hidden');
     } finally {
-        // Reset loading state
         submitButton.disabled = false;
     }
 };
