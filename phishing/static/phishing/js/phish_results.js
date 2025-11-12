@@ -41,7 +41,7 @@ form.onsubmit = async (event) => {
         const data = await response.json();
 
         // Wait 30 seconds before showing result
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        await new Promise(resolve => setTimeout(resolve, 10000));
 
         // Hide loader, show result
         loading.classList.add('hidden');
